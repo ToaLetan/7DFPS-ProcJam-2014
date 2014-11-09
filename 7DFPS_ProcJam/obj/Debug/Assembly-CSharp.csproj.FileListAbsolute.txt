@@ -1,0 +1,11 @@
+E:\Game Jams\7DFPS_ProcJam\Temp\bin\Debug\Assembly-CSharp.dll
+E:\Game Jams\7DFPS_ProcJam\Temp\bin\Debug\Assembly-CSharp.pdb
+E:\Game Jams\7DFPS_ProcJam\Temp\bin\Debug\UnityEditor.dll
+E:\Game Jams\7DFPS_ProcJam\Temp\bin\Debug\UnityEngine.dll
+E:\Game Jams\7DFPS_ProcJam\Temp\bin\Debug\Mono.Cecil.dll
+E:\Game Jams\7DFPS_ProcJam\Temp\bin\Debug\nunit.framework.dll
+E:\Game Jams\7DFPS_ProcJam\Temp\bin\Debug\Unity.DataContract.dll
+E:\Game Jams\7DFPS_ProcJam\Temp\bin\Debug\ICSharpCode.NRefactory.dll
+E:\Game Jams\7DFPS_ProcJam\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
+E:\Game Jams\7DFPS_ProcJam\obj\Debug\Assembly-CSharp.dll
+E:\Game Jams\7DFPS_ProcJam\obj\Debug\Assembly-CSharp.pdb
