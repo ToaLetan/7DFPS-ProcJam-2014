@@ -9,6 +9,10 @@ public struct Keybinds
     public KeyCode BackwardKey;
     public KeyCode LeftKey;
     public KeyCode RightKey;
+    public KeyCode PauseKey;
+
+    public int LeftMouse;
+    public int RightMouse;
 }
 
 public class InputManager
@@ -29,6 +33,7 @@ public class InputManager
     private static InputManager instance = null;
 
     private Vector3 previousMousePos = Vector3.zero;
+    private Vector3 mousePosition = Vector3.zero;
     #endregion
 
     #region Properties
@@ -46,6 +51,11 @@ public class InputManager
             return instance;
         }
     }
+
+    public Vector3 MousePosition
+    {
+        get { return mousePosition; }
+    }
     #endregion
 
     private InputManager()
@@ -54,6 +64,10 @@ public class InputManager
         playerKeybinds.BackwardKey = KeyCode.S;
         playerKeybinds.LeftKey = KeyCode.A;
         playerKeybinds.RightKey = KeyCode.D;
+        playerKeybinds.PauseKey = KeyCode.P;
+
+        playerKeybinds.LeftMouse = 0;
+        playerKeybinds.RightMouse = 1;
     }
 
     #region Methods
@@ -76,6 +90,11 @@ public class InputManager
         if (Input.GetKey(playerKeybinds.RightKey))
             heldKeys.Add(playerKeybinds.RightKey.ToString());
 
+        if (Input.GetMouseButton(playerKeybinds.LeftMouse))
+            heldKeys.Add(playerKeybinds.LeftMouse.ToString());
+        if (Input.GetMouseButton(playerKeybinds.RightMouse))
+            heldKeys.Add(playerKeybinds.RightMouse.ToString());
+
         if (heldKeys.Count > 0)
         {
             if (Keys_Held != null)
@@ -96,6 +115,11 @@ public class InputManager
         if (!Input.GetKey(playerKeybinds.RightKey))
             releasedKeys.Add(playerKeybinds.RightKey.ToString());
 
+        if (!Input.GetMouseButton(playerKeybinds.LeftMouse))
+            releasedKeys.Add(playerKeybinds.LeftMouse.ToString());
+        if (!Input.GetMouseButton(playerKeybinds.RightMouse))
+            releasedKeys.Add(playerKeybinds.RightMouse.ToString());
+
         if (releasedKeys.Count > 0)
         {
             if (Keys_Released != null)
@@ -107,14 +131,21 @@ public class InputManager
         //Check for specific keys being pressed once.
         List<string> pressedKeys = new List<string>();
 
-        if (!Input.GetKeyDown(playerKeybinds.ForwardKey))
+        if (Input.GetKeyDown(playerKeybinds.ForwardKey))
             pressedKeys.Add(playerKeybinds.ForwardKey.ToString());
-        if (!Input.GetKeyDown(playerKeybinds.BackwardKey))
+        if (Input.GetKeyDown(playerKeybinds.BackwardKey))
             pressedKeys.Add(playerKeybinds.BackwardKey.ToString());
-        if (!Input.GetKeyDown(playerKeybinds.LeftKey))
+        if (Input.GetKeyDown(playerKeybinds.LeftKey))
             pressedKeys.Add(playerKeybinds.LeftKey.ToString());
-        if (!Input.GetKeyDown(playerKeybinds.RightKey))
+        if (Input.GetKeyDown(playerKeybinds.RightKey))
             pressedKeys.Add(playerKeybinds.RightKey.ToString());
+        if (Input.GetKeyDown(playerKeybinds.PauseKey))
+            pressedKeys.Add(playerKeybinds.PauseKey.ToString());
+
+        if (Input.GetMouseButtonDown(playerKeybinds.LeftMouse))
+            pressedKeys.Add(playerKeybinds.LeftMouse.ToString());
+        if (Input.GetMouseButtonDown(playerKeybinds.RightMouse))
+            pressedKeys.Add(playerKeybinds.RightMouse.ToString());
 
         if (pressedKeys.Count > 0)
         {
@@ -125,6 +156,8 @@ public class InputManager
         }
 
         //Check mouse movement
+        mousePosition = Input.mousePosition;
+
         if (Input.mousePosition != previousMousePos)
         {
             if (Mouse_Movement != null)
