@@ -16,6 +16,7 @@ public class UIScript : MonoBehaviour
     private GameObject speedText = null;
     private GameObject damageIndicator = null;
     private GameObject pauseScreen = null;
+    private GameObject gameOverScreen = null;
 
     private int prevNumOfEnemies = -1;
     private int prevKillCount = -1;
@@ -26,6 +27,7 @@ public class UIScript : MonoBehaviour
     private float prevDamageAlpha = -1;
 
     private bool prevPauseState = false;
+    private bool prevGameOverState = false;
 
 	// Use this for initialization
 	void Start () 
@@ -51,6 +53,9 @@ public class UIScript : MonoBehaviour
 
         pauseScreen = gameObject.transform.FindChild("Pause_Screen").gameObject;
         pauseScreen.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+
+        gameOverScreen = gameObject.transform.FindChild("GameOver_Screen").gameObject;
+        gameOverScreen.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
 
         gameManager.PlayerTakeDamage += ShowHit;
 	}
@@ -85,8 +90,14 @@ public class UIScript : MonoBehaviour
 
             ShowHidePauseScreen(false);
         }
-        else
+        if (gameManager.IsGamePaused == true && gameManager.IsGameOver == false)
             ShowHidePauseScreen(true);
+
+        if (gameManager.IsGameOver == true)
+        {
+            UpdateHull(); //Make sure that the Hull displays as 0.
+            ShowHideGameOverScreen(true);
+        }
 	}
 
     private void UpdateThreatLevel()
@@ -186,5 +197,17 @@ public class UIScript : MonoBehaviour
                 pauseScreen.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
         }
         prevPauseState = gameManager.IsGamePaused;
+    }
+
+    private void ShowHideGameOverScreen(bool isGameOver)
+    {
+        if (prevGameOverState != gameManager.IsGameOver)
+        {
+            if (isGameOver == true)
+                gameOverScreen.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 1);
+            else
+                gameOverScreen.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 0);
+        }
+        prevGameOverState = gameManager.IsGameOver;
     }
 }

@@ -21,6 +21,9 @@ public class PlayerProjectile : MonoBehaviour
         switch(collider.gameObject.tag)
         {
             case "Enemy":
+                //Spawn the enemy death animation and destroy the enemy.
+                GameObject.Instantiate(Resources.Load("Prefabs/Enemy_Death_Anim") as GameObject, collider.gameObject.transform.position, Quaternion.identity);
+
                 GameObject.Destroy(collider.gameObject);
 
                 GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().PlayerNumKills++;

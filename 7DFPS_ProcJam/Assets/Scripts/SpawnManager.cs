@@ -104,8 +104,6 @@ public class SpawnManager
         spawnTimer.StartTimer();
 
         isSpawningWave = true;
-
-        Debug.Log("NEW WAVE SPAWN: " + currentWave);
     }
 
     private void SpawnNewEnemy()

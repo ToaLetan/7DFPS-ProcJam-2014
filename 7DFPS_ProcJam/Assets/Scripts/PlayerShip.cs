@@ -45,8 +45,9 @@ public class PlayerShip : MonoBehaviour
 
         inputManager.Keys_Held += ProcessMovement;
         inputManager.Keys_Released += ApplyDeceleration;
-        inputManager.Keys_Pressed += ProcessMouseClicks;
-        //inputManager.Mouse_Movement += ProcessRotation;
+        inputManager.Keys_Pressed += ProcessMouseClickButtonPress;
+
+        gameManager.GameRestart += OnRestart;
 
         cockpit = gameObject.transform.FindChild("Cockpit").gameObject;
         crosshair = gameObject.transform.FindChild("Crosshair").gameObject;
@@ -228,7 +229,7 @@ public class PlayerShip : MonoBehaviour
         cursor.transform.localPosition = new Vector3(cursorX, cursorY, cursor.transform.localPosition.z);
     }
 
-    private void ProcessMouseClicks(List<string> keysPressed)
+    private void ProcessMouseClickButtonPress(List<string> keysPressed)
     {
         if (keysPressed.Contains(inputManager.PlayerKeybinds.LeftMouse.ToString()) )
         {
@@ -249,6 +250,16 @@ public class PlayerShip : MonoBehaviour
             else
                 gameManager.IsGamePaused = false;
         }
+
+        if (keysPressed.Contains(inputManager.PlayerKeybinds.RestartKey.ToString()))
+        {
+            //hasClickedWindow = false;
+            if (gameManager.IsGameOver == true)
+            {
+                gameManager.IsGameOver = false;
+                gameManager.RestartGame();
+            }   
+        }
     }
 
     private void Shoot()
@@ -260,5 +271,14 @@ public class PlayerShip : MonoBehaviour
 
         projectile.transform.position = projectilePosition;
         projectile.transform.rotation = cockpit.transform.rotation;
+    }
+
+    private void OnRestart()
+    {
+        inputManager.Keys_Held -= ProcessMovement;
+        inputManager.Keys_Released -= ApplyDeceleration;
+        inputManager.Keys_Pressed -= ProcessMouseClickButtonPress;
+
+        gameManager.GameRestart -= OnRestart;
     }
 }

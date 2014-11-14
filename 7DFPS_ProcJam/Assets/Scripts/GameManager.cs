@@ -14,10 +14,12 @@ public class GameManager : MonoBehaviour
     private int prevNumEnemies = 0;
 
     private bool isGamePaused = false;
+    private bool isGameOver = false;
 
-    public delegate void PlayerEvent();
+    public delegate void GameEvent();
 
-    public PlayerEvent PlayerTakeDamage;
+    public GameEvent PlayerTakeDamage;
+    public GameEvent GameRestart;
 
     public int PlayerNumKills
     {
@@ -41,6 +43,12 @@ public class GameManager : MonoBehaviour
     {
         get { return isGamePaused; }
         set { isGamePaused = value; }
+    }
+
+    public bool IsGameOver
+    {
+        get { return isGameOver; }
+        set { isGameOver = value; }
     }
 
 	// Use this for initialization
@@ -84,5 +92,13 @@ public class GameManager : MonoBehaviour
             if (PlayerTakeDamage != null)
                 PlayerTakeDamage();
         }
+    }
+
+    public void RestartGame()
+    {
+        if (GameRestart != null)
+            GameRestart(); //Fire this event to all objects that need to unsub from events.
+
+        Application.LoadLevel(0);
     }
 }
