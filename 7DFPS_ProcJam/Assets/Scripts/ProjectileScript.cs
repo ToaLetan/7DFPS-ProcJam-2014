@@ -3,8 +3,9 @@ using System.Collections;
 
 public class ProjectileScript : MonoBehaviour 
 {
-    private const float PROJECTILE_SPEED = 5.0f;
-    private const float PROJECTILE_LIFESPAN = 10.0f;
+    private const float PROJECTILE_LIFESPAN = 5.0f;
+
+    public float ProjectileSpeed = 5.0f;
 
     private Timer lifeTimer = null;
 
@@ -28,7 +29,7 @@ public class ProjectileScript : MonoBehaviour
     {
         Vector3 newPosition = gameObject.transform.position;
 
-        newPosition += gameObject.transform.forward * PROJECTILE_SPEED * Time.deltaTime;
+        newPosition += gameObject.transform.forward * ProjectileSpeed * Time.deltaTime;
 
         gameObject.transform.position = newPosition;
     }

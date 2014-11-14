@@ -4,16 +4,16 @@ using System.Collections.Generic;
 
 public class SpaceGenerator //The class that spawns all space decorations (stars, planets, maybe warpgates too)
 {
-    private const float SPACE_MAX_X = 50.0f;
-    private const float SPACE_MAX_Y = 50.0f;
-    private const float SPACE_MAX_Z = 50.0f;
+    private const float SPACE_MAX_X = 75.0f;
+    private const float SPACE_MAX_Y = 75.0f;
+    private const float SPACE_MAX_Z = 75.0f;
 
     private const float PLANET_SPAWN_CHANCE = 0.1f; //10% chance to spawn a planet
     private const float SHATTERED_PLANET_SPAWN_CHANCE = 0.4f; //If a planet spawns, it has a 40% chance of being the shattered design
     private const float PLANET_MIN_COLOR_SUM = 0.4f;
     private const float PLANET_MAX_COLOR_SUM = 2.5f;
 
-    private const int NUM_SPACE_OBJS = 400;
+    private const int NUM_SPACE_OBJS = 450;
 
     private List<Object> possibleObjectsList = new List<Object>();
 

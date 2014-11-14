@@ -3,8 +3,10 @@ using System.Collections;
 
 public class EnemyBehaviour : MonoBehaviour 
 {
+    private const float MIN_RANGE_FROM_TARGET = 1.5f;
     private const float MAX_RANGE = 5.0f;
     private const float SHOT_COOLDOWN = 2.5f;
+    private const float MOVE_SPEED = 7.5f;
 
     private GameObject target = null;
 
@@ -36,6 +38,9 @@ public class EnemyBehaviour : MonoBehaviour
 
         if (isTargetInRange == true && canShoot == true)
             Shoot();
+
+        if (isTargetInRange == false || GetDistanceFromTarget() > MIN_RANGE_FROM_TARGET)
+            MoveToTarget();
 	}
 
     private void CheckTargetRange()
@@ -68,13 +73,34 @@ public class EnemyBehaviour : MonoBehaviour
 
         canShoot = false;
         projectileTimer.StartTimer();
-
-        Debug.Log("SHOOSTED");
     }
 
     private void OnShotCooldownEnd()
     {
         canShoot = true;
         projectileTimer.ResetTimer();
+    }
+
+    private float GetDistanceFromTarget()
+    {
+        Vector3 currentPosition = gameObject.transform.position;
+        Vector3 targetPosition = target.transform.position;
+
+        return Mathf.Sqrt(Mathf.Pow(targetPosition.x - currentPosition.x, 2) + Mathf.Pow(targetPosition.y - currentPosition.y, 2) + Mathf.Pow(targetPosition.z - currentPosition.z, 2) );
+    }
+
+    private void MoveToTarget()
+    {
+        if (GetDistanceFromTarget() > MIN_RANGE_FROM_TARGET)
+        {
+            transform.LookAt(target.transform);
+
+            gameObject.transform.position += gameObject.transform.forward * MOVE_SPEED * Time.deltaTime;
+        }
+    }
+
+    private void MoveToRandPos()
+    {
+
     }
 }

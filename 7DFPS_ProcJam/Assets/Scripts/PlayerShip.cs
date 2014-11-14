@@ -4,11 +4,15 @@ using System.Collections.Generic;
 
 public class PlayerShip : MonoBehaviour 
 {
-    private const float MOVESPEED = 5.0f;
+    private const float ACCELERATION = 0.25f;
+    private const float DECELERATION = 2.0f;
+    private const float MAX_VELOCITY = 0.5f;
     private const float TURNSPEED = 5.0f;
     private const float MAX_ROTATION_SPEED = 2.5f;
-    private const float ROTATION_DEADZONE = 20.0f;
+    private const float ROTATION_DEADZONE = 10.0f;
+    private const float ROTATION_DECELERATION = 1.0f;
 
+    //Rotation variables
     private float currentRotationSpeedX = 0.0f;
     private float currentRotationSpeedY = 0.0f;
     private float previousMousePosX = 0.0f;
@@ -16,24 +20,35 @@ public class PlayerShip : MonoBehaviour
     private float rotationAccelerationX = 0.0f;
     private float rotationAccelerationY = 0.0f;
 
+    private float movementAcceleration = 0.0f;
+    public float currentVelocity = 0.0f;
+
+    private Vector3 previousDirectionMoved = Vector3.zero;
+
     private InputManager inputManager;
 
     private GameObject cockpit = null;
     private GameObject crosshair = null;
+    private GameObject cursor = null;
 
     private bool hasClickedWindow = false;
 
 	// Use this for initialization
 	void Start () 
     {
+        //Hide the mouse cursor.
+        Screen.showCursor = false;
+
         inputManager = InputManager.Instance;
 
         inputManager.Keys_Held += ProcessMovement;
+        inputManager.Keys_Released += ApplyDeceleration;
         inputManager.Keys_Pressed += ProcessMouseClicks;
         //inputManager.Mouse_Movement += ProcessRotation;
 
         cockpit = gameObject.transform.FindChild("Cockpit").gameObject;
         crosshair = gameObject.transform.FindChild("Crosshair").gameObject;
+        cursor = gameObject.transform.FindChild("Cursor").gameObject;
 	}
 	
 	// Update is called once per frame
@@ -41,9 +56,12 @@ public class PlayerShip : MonoBehaviour
     {
         inputManager.Update();
 
+
         if (hasClickedWindow == true)
+        {
+            PositionCrosshair(inputManager.MousePosition);
             ProcessRotation(inputManager.MousePosition);
-        //PositionCrosshair(inputManager.MousePosition);
+        }
 	}
 
     private void ProcessMovement(List<string> keysHeld)
@@ -53,21 +71,43 @@ public class PlayerShip : MonoBehaviour
         //Move forward or backward based on rotation.
         if (keysHeld.Contains(inputManager.PlayerKeybinds.ForwardKey.ToString()) )
         {
-            newPosition += gameObject.transform.forward * MOVESPEED * Time.deltaTime;
+            if (currentVelocity < MAX_VELOCITY)
+            {
+                currentVelocity += ACCELERATION * Time.deltaTime;
+            }
+            previousDirectionMoved = gameObject.transform.forward;
+            newPosition += gameObject.transform.forward * currentVelocity;
         }
+
         if (keysHeld.Contains(inputManager.PlayerKeybinds.BackwardKey.ToString()))
         {
-            newPosition += -gameObject.transform.forward * MOVESPEED * Time.deltaTime;
+            if (currentVelocity < MAX_VELOCITY)
+            {
+                currentVelocity += ACCELERATION * Time.deltaTime;
+            }
+            previousDirectionMoved = -gameObject.transform.forward;
+            newPosition += -gameObject.transform.forward * currentVelocity;
         }
 
         //Strafe left or right based on rotation.
         if (keysHeld.Contains(inputManager.PlayerKeybinds.LeftKey.ToString()))
         {
-            newPosition += -gameObject.transform.right * MOVESPEED * Time.deltaTime;
+            if (currentVelocity < MAX_VELOCITY)
+            {
+                currentVelocity += ACCELERATION * Time.deltaTime;
+            }
+            previousDirectionMoved = -gameObject.transform.right;
+            newPosition += -gameObject.transform.right * currentVelocity;
         }
+
         if (keysHeld.Contains(inputManager.PlayerKeybinds.RightKey.ToString()))
         {
-            newPosition += gameObject.transform.right * MOVESPEED * Time.deltaTime;
+            if (currentVelocity < MAX_VELOCITY)
+            {
+                currentVelocity += ACCELERATION * Time.deltaTime;
+            }
+            previousDirectionMoved = gameObject.transform.right;
+            newPosition += gameObject.transform.right * currentVelocity;
         }
 
         gameObject.transform.position = newPosition;
@@ -129,10 +169,32 @@ public class PlayerShip : MonoBehaviour
         currentRotationSpeedX += rotationAccelerationX + TURNSPEED * Time.deltaTime * directionX;
         currentRotationSpeedY += rotationAccelerationY + TURNSPEED * Time.deltaTime * directionY;
 
+        //Quaternion newRotationX = Quaternion.AngleAxis(angleX, Vector3.up);
+        //Quaternion newRotationY = Quaternion.AngleAxis(angleY, -Vector3.right);
+
         Quaternion newRotationX = Quaternion.AngleAxis(currentRotationSpeedX, Vector3.up);
         Quaternion newRotationY = Quaternion.AngleAxis(currentRotationSpeedY, -Vector3.right);
 
         gameObject.transform.rotation = newRotationX * newRotationY;
+
+        previousMousePosX = angleX;
+        previousMousePosY = angleY;
+    }
+
+    private void ApplyDeceleration(List<string> keysReleased)
+    {
+        Vector3 newPosition = gameObject.transform.position;
+
+        if (keysReleased.Contains(inputManager.PlayerKeybinds.ForwardKey.ToString()) && keysReleased.Contains(inputManager.PlayerKeybinds.BackwardKey.ToString())
+            && keysReleased.Contains(inputManager.PlayerKeybinds.LeftKey.ToString()) && keysReleased.Contains(inputManager.PlayerKeybinds.RightKey.ToString()))
+        {
+            if (currentVelocity > 0)
+            {
+                currentVelocity -= DECELERATION * Time.deltaTime;
+
+                gameObject.transform.position += currentVelocity * previousDirectionMoved;
+            }
+        }
     }
 
     private void PositionCrosshair(Vector3 mousePosition)
@@ -140,8 +202,15 @@ public class PlayerShip : MonoBehaviour
         float cursorX = 0;
         float cursorY = 0;
 
-        cursorX = mousePosition.x - Screen.width / 2;
-        cursorY = mousePosition.y - Screen.height / 2;
+        float cockpitWidth = cockpit.transform.GetComponent<BoxCollider>().bounds.extents.x * 2;
+        float cockpitHeight = cockpit.transform.GetComponent<BoxCollider>().bounds.extents.x * 2;
+
+        //Determine an X and Y position based on the mouse position in relation to the HUD.
+        float percentX = (mousePosition.x - Screen.width / 2) / Screen.width;
+        float percentY = (mousePosition.y - Screen.height / 2) / Screen.height;
+
+        cursorX = percentX * cockpitWidth;
+        cursorY = percentY * cockpitHeight;
 
         crosshair.transform.localPosition = new Vector3(cursorX, cursorY, crosshair.transform.localPosition.z);
     }
@@ -165,7 +234,7 @@ public class PlayerShip : MonoBehaviour
         GameObject projectile = GameObject.Instantiate(Resources.Load("Prefabs/Projectile")) as GameObject;
 
         Vector3 projectilePosition = crosshair.transform.position;
-        projectilePosition.z += 0.05f;
+        //projectilePosition.z += 0.05f;
 
         projectile.transform.position = projectilePosition;
         projectile.transform.rotation = cockpit.transform.rotation;

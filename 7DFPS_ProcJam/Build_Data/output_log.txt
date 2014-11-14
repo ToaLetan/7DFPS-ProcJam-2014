@@ -6,11 +6,31 @@ Direct3D:
     Vendor:   ATI
     VRAM:     1009 MB
 Begin MonoManager ReloadAssembly
-Platform assembly: E:\Game Jams\7DFPS_ProcJam\Build_Data\Managed\UnityEngine.dll (this message is harmless)
-Loading E:\Game Jams\7DFPS_ProcJam\Build_Data\Managed\UnityEngine.dll into Unity Child Domain
-Platform assembly: E:\Game Jams\7DFPS_ProcJam\Build_Data\Managed\Assembly-CSharp.dll (this message is harmless)
-Loading E:\Game Jams\7DFPS_ProcJam\Build_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-- Completed reload, in  0.063 seconds
+Platform assembly: E:\Game Jams\7DFPS-ProcJam-2014\7DFPS_ProcJam\Build_Data\Managed\UnityEngine.dll (this message is harmless)
+Loading E:\Game Jams\7DFPS-ProcJam-2014\7DFPS_ProcJam\Build_Data\Managed\UnityEngine.dll into Unity Child Domain
+Platform assembly: E:\Game Jams\7DFPS-ProcJam-2014\7DFPS_ProcJam\Build_Data\Managed\Assembly-CSharp.dll (this message is harmless)
+Loading E:\Game Jams\7DFPS-ProcJam-2014\7DFPS_ProcJam\Build_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
+- Completed reload, in  0.066 seconds
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
+Your space, sir.
+ 
+(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+
+NEW WAVE SPAWN: 1
+ 
+(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+
+HULL DAMAGE
+ 
+(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+
+HULL DAMAGE
+ 
+(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+
+HULL DAMAGE
+ 
+(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
+
