@@ -9,9 +9,13 @@ public class ProjectileScript : MonoBehaviour
 
     private Timer lifeTimer = null;
 
+    private GameManager gameManager = null;
+
 	// Use this for initialization
 	void Start () 
     {
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+
         lifeTimer = new Timer(PROJECTILE_LIFESPAN, true);
         lifeTimer.OnTimerComplete += DestroyProjectile;
 	}
@@ -19,10 +23,13 @@ public class ProjectileScript : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
     {
-        if (lifeTimer != null)
-            lifeTimer.Update();
+        if (gameManager.IsGamePaused == false)
+        {
+            if (lifeTimer != null)
+                lifeTimer.Update();
 
-        ProcessMovement();
+            ProcessMovement();
+        }
 	}
 
     private void ProcessMovement()

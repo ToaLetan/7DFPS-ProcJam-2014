@@ -10,7 +10,7 @@ Platform assembly: E:\Game Jams\7DFPS-ProcJam-2014\7DFPS_ProcJam\Build_Data\Mana
 Loading E:\Game Jams\7DFPS-ProcJam-2014\7DFPS_ProcJam\Build_Data\Managed\UnityEngine.dll into Unity Child Domain
 Platform assembly: E:\Game Jams\7DFPS-ProcJam-2014\7DFPS_ProcJam\Build_Data\Managed\Assembly-CSharp.dll (this message is harmless)
 Loading E:\Game Jams\7DFPS-ProcJam-2014\7DFPS_ProcJam\Build_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-- Completed reload, in  0.066 seconds
+- Completed reload, in  0.060 seconds
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
@@ -22,15 +22,7 @@ NEW WAVE SPAWN: 1
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 
-HULL DAMAGE
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-HULL DAMAGE
- 
-(Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
-
-HULL DAMAGE
+NEW WAVE SPAWN: 2
  
 (Filename: C:/BuildAgent/work/d63dfc6385190b60/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 49)
 

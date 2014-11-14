@@ -26,6 +26,7 @@ public class PlayerShip : MonoBehaviour
     private Vector3 previousDirectionMoved = Vector3.zero;
 
     private InputManager inputManager;
+    private GameManager gameManager;
 
     private GameObject cockpit = null;
     private GameObject crosshair = null;
@@ -40,6 +41,7 @@ public class PlayerShip : MonoBehaviour
         Screen.showCursor = false;
 
         inputManager = InputManager.Instance;
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 
         inputManager.Keys_Held += ProcessMovement;
         inputManager.Keys_Released += ApplyDeceleration;
@@ -56,148 +58,159 @@ public class PlayerShip : MonoBehaviour
     {
         inputManager.Update();
 
-
-        if (hasClickedWindow == true)
+        if (gameManager.IsGamePaused == false)
         {
-            PositionCrosshair(inputManager.MousePosition);
-            ProcessRotation(inputManager.MousePosition);
+            if (hasClickedWindow == true)
+            {
+                PositionCrosshair(inputManager.MousePosition);
+                ProcessRotation(inputManager.MousePosition);
+            }
         }
 	}
 
     private void ProcessMovement(List<string> keysHeld)
     {
-        Vector3 newPosition = gameObject.transform.position;
-
-        //Move forward or backward based on rotation.
-        if (keysHeld.Contains(inputManager.PlayerKeybinds.ForwardKey.ToString()) )
+        if (gameManager.IsGamePaused == false)
         {
-            if (currentVelocity < MAX_VELOCITY)
-            {
-                currentVelocity += ACCELERATION * Time.deltaTime;
-            }
-            previousDirectionMoved = gameObject.transform.forward;
-            newPosition += gameObject.transform.forward * currentVelocity;
-        }
+            Vector3 newPosition = gameObject.transform.position;
 
-        if (keysHeld.Contains(inputManager.PlayerKeybinds.BackwardKey.ToString()))
-        {
-            if (currentVelocity < MAX_VELOCITY)
+            //Move forward or backward based on rotation.
+            if (keysHeld.Contains(inputManager.PlayerKeybinds.ForwardKey.ToString()))
             {
-                currentVelocity += ACCELERATION * Time.deltaTime;
+                if (currentVelocity < MAX_VELOCITY)
+                {
+                    currentVelocity += ACCELERATION * Time.deltaTime;
+                }
+                previousDirectionMoved = gameObject.transform.forward;
+                newPosition += gameObject.transform.forward * currentVelocity;
             }
-            previousDirectionMoved = -gameObject.transform.forward;
-            newPosition += -gameObject.transform.forward * currentVelocity;
-        }
 
-        //Strafe left or right based on rotation.
-        if (keysHeld.Contains(inputManager.PlayerKeybinds.LeftKey.ToString()))
-        {
-            if (currentVelocity < MAX_VELOCITY)
+            if (keysHeld.Contains(inputManager.PlayerKeybinds.BackwardKey.ToString()))
             {
-                currentVelocity += ACCELERATION * Time.deltaTime;
+                if (currentVelocity < MAX_VELOCITY)
+                {
+                    currentVelocity += ACCELERATION * Time.deltaTime;
+                }
+                previousDirectionMoved = -gameObject.transform.forward;
+                newPosition += -gameObject.transform.forward * currentVelocity;
             }
-            previousDirectionMoved = -gameObject.transform.right;
-            newPosition += -gameObject.transform.right * currentVelocity;
-        }
 
-        if (keysHeld.Contains(inputManager.PlayerKeybinds.RightKey.ToString()))
-        {
-            if (currentVelocity < MAX_VELOCITY)
+            //Strafe left or right based on rotation.
+            if (keysHeld.Contains(inputManager.PlayerKeybinds.LeftKey.ToString()))
             {
-                currentVelocity += ACCELERATION * Time.deltaTime;
+                if (currentVelocity < MAX_VELOCITY)
+                {
+                    currentVelocity += ACCELERATION * Time.deltaTime;
+                }
+                previousDirectionMoved = -gameObject.transform.right;
+                newPosition += -gameObject.transform.right * currentVelocity;
             }
-            previousDirectionMoved = gameObject.transform.right;
-            newPosition += gameObject.transform.right * currentVelocity;
-        }
 
-        gameObject.transform.position = newPosition;
+            if (keysHeld.Contains(inputManager.PlayerKeybinds.RightKey.ToString()))
+            {
+                if (currentVelocity < MAX_VELOCITY)
+                {
+                    currentVelocity += ACCELERATION * Time.deltaTime;
+                }
+                previousDirectionMoved = gameObject.transform.right;
+                newPosition += gameObject.transform.right * currentVelocity;
+            }
+
+            gameObject.transform.position = newPosition;
+        }
     }
 
     private void ProcessRotation(Vector3 mousePosition)
     {
         //TODO: Figure out a way to handle being upside-down (ALWAYS turn right when mouse is on the right side)
 
-        float angleX = mousePosition.x - Screen.width/2;
-        float angleY = mousePosition.y - Screen.height/2;
-
-        int directionX = 0;
-        int directionY = 0;
-
-        //Apply acceleration to the horizontal rotation and cap it at MAX_ROTATION_SPEED
-        if (rotationAccelerationX < MAX_ROTATION_SPEED && rotationAccelerationX > -MAX_ROTATION_SPEED)
-            rotationAccelerationX = (angleX * 0.01f);
-
-        if (rotationAccelerationX > MAX_ROTATION_SPEED)
-            rotationAccelerationX = MAX_ROTATION_SPEED;
-        if (rotationAccelerationX < -MAX_ROTATION_SPEED)
-            rotationAccelerationX = -MAX_ROTATION_SPEED;
-
-        //Prevent any rotation if the mouse is near the center of the screen.
-        if (angleX > ROTATION_DEADZONE)
+        if (gameManager.IsGamePaused == false)
         {
-            directionX = 1;
+            float angleX = mousePosition.x - Screen.width / 2;
+            float angleY = mousePosition.y - Screen.height / 2;
+
+            int directionX = 0;
+            int directionY = 0;
+
+            //Apply acceleration to the horizontal rotation and cap it at MAX_ROTATION_SPEED
+            if (rotationAccelerationX < MAX_ROTATION_SPEED && rotationAccelerationX > -MAX_ROTATION_SPEED)
+                rotationAccelerationX = (angleX * 0.01f);
+
+            if (rotationAccelerationX > MAX_ROTATION_SPEED)
+                rotationAccelerationX = MAX_ROTATION_SPEED;
+            if (rotationAccelerationX < -MAX_ROTATION_SPEED)
+                rotationAccelerationX = -MAX_ROTATION_SPEED;
+
+            //Prevent any rotation if the mouse is near the center of the screen.
+            if (angleX > ROTATION_DEADZONE)
+            {
+                directionX = 1;
+            }
+            else if (angleX < -ROTATION_DEADZONE)
+            {
+                directionX = -1;
+            }
+            else
+                rotationAccelerationX = 0;
+
+            //Do the same to the vertical rotation.
+            if (rotationAccelerationY < MAX_ROTATION_SPEED && rotationAccelerationY > -MAX_ROTATION_SPEED)
+                rotationAccelerationY = (angleY * 0.01f);
+
+            if (rotationAccelerationY > MAX_ROTATION_SPEED)
+                rotationAccelerationY = MAX_ROTATION_SPEED;
+            if (rotationAccelerationY < -MAX_ROTATION_SPEED)
+                rotationAccelerationY = -MAX_ROTATION_SPEED;
+
+            //Prevent any rotation if the mouse is near the center of the screen.
+            if (angleY > ROTATION_DEADZONE)
+            {
+                directionY = 1;
+            }
+            else if (angleY < -ROTATION_DEADZONE)
+            {
+                directionY = -1;
+            }
+            else
+                rotationAccelerationY = 0;
+
+            //Apply the acceleration to the rotation speed.
+            currentRotationSpeedX += rotationAccelerationX + TURNSPEED * Time.deltaTime * directionX;
+            currentRotationSpeedY += rotationAccelerationY + TURNSPEED * Time.deltaTime * directionY;
+
+            //Quaternion newRotationX = Quaternion.AngleAxis(angleX, Vector3.up);
+            //Quaternion newRotationY = Quaternion.AngleAxis(angleY, -Vector3.right);
+
+            Quaternion newRotationX = Quaternion.AngleAxis(currentRotationSpeedX, Vector3.up);
+            Quaternion newRotationY = Quaternion.AngleAxis(currentRotationSpeedY, -Vector3.right);
+
+            gameObject.transform.rotation = newRotationX * newRotationY;
+
+            previousMousePosX = angleX;
+            previousMousePosY = angleY;
         }
-        else if (angleX < -ROTATION_DEADZONE)
-        {
-            directionX = -1;
-        }
-        else
-            rotationAccelerationX = 0;
-
-        //Do the same to the vertical rotation.
-        if (rotationAccelerationY < MAX_ROTATION_SPEED && rotationAccelerationY > -MAX_ROTATION_SPEED)
-            rotationAccelerationY = (angleY * 0.01f);
-
-        if (rotationAccelerationY > MAX_ROTATION_SPEED)
-            rotationAccelerationY = MAX_ROTATION_SPEED;
-        if (rotationAccelerationY < -MAX_ROTATION_SPEED)
-            rotationAccelerationY = -MAX_ROTATION_SPEED;
-
-        //Prevent any rotation if the mouse is near the center of the screen.
-        if (angleY > ROTATION_DEADZONE)
-        {
-            directionY = 1;
-        }
-        else if (angleY < -ROTATION_DEADZONE)
-        {
-            directionY = -1;
-        }
-        else
-            rotationAccelerationY = 0;
-
-        //Apply the acceleration to the rotation speed.
-        currentRotationSpeedX += rotationAccelerationX + TURNSPEED * Time.deltaTime * directionX;
-        currentRotationSpeedY += rotationAccelerationY + TURNSPEED * Time.deltaTime * directionY;
-
-        //Quaternion newRotationX = Quaternion.AngleAxis(angleX, Vector3.up);
-        //Quaternion newRotationY = Quaternion.AngleAxis(angleY, -Vector3.right);
-
-        Quaternion newRotationX = Quaternion.AngleAxis(currentRotationSpeedX, Vector3.up);
-        Quaternion newRotationY = Quaternion.AngleAxis(currentRotationSpeedY, -Vector3.right);
-
-        gameObject.transform.rotation = newRotationX * newRotationY;
-
-        previousMousePosX = angleX;
-        previousMousePosY = angleY;
     }
 
     private void ApplyDeceleration(List<string> keysReleased)
     {
-        Vector3 newPosition = gameObject.transform.position;
-
-        if (keysReleased.Contains(inputManager.PlayerKeybinds.ForwardKey.ToString()) && keysReleased.Contains(inputManager.PlayerKeybinds.BackwardKey.ToString())
-            && keysReleased.Contains(inputManager.PlayerKeybinds.LeftKey.ToString()) && keysReleased.Contains(inputManager.PlayerKeybinds.RightKey.ToString()))
+        if (gameManager.IsGamePaused == false)
         {
-            if (currentVelocity > 0)
-            {
-                currentVelocity -= DECELERATION * Time.deltaTime;
+            Vector3 newPosition = gameObject.transform.position;
 
-                gameObject.transform.position += currentVelocity * previousDirectionMoved;
+            if (keysReleased.Contains(inputManager.PlayerKeybinds.ForwardKey.ToString()) && keysReleased.Contains(inputManager.PlayerKeybinds.BackwardKey.ToString())
+                && keysReleased.Contains(inputManager.PlayerKeybinds.LeftKey.ToString()) && keysReleased.Contains(inputManager.PlayerKeybinds.RightKey.ToString()))
+            {
+                if (currentVelocity > 0)
+                {
+                    currentVelocity -= DECELERATION * Time.deltaTime;
+
+                    gameObject.transform.position += currentVelocity * previousDirectionMoved;
+                }
             }
         }
     }
 
-    private void PositionCrosshair(Vector3 mousePosition)
+    private void PositionCrosshair(Vector3 mousePosition) //Position the rotation helper.
     {
         float cursorX = 0;
         float cursorY = 0;
@@ -212,21 +225,30 @@ public class PlayerShip : MonoBehaviour
         cursorX = percentX * cockpitWidth;
         cursorY = percentY * cockpitHeight;
 
-        crosshair.transform.localPosition = new Vector3(cursorX, cursorY, crosshair.transform.localPosition.z);
+        cursor.transform.localPosition = new Vector3(cursorX, cursorY, cursor.transform.localPosition.z);
     }
 
     private void ProcessMouseClicks(List<string> keysPressed)
     {
         if (keysPressed.Contains(inputManager.PlayerKeybinds.LeftMouse.ToString()) )
         {
-            if (hasClickedWindow == true)
-                Shoot();
-            else
-                hasClickedWindow = true;
+            if (gameManager.IsGamePaused == false)
+            {
+                if (hasClickedWindow == true)
+                    Shoot();
+                else
+                    hasClickedWindow = true;
+            }
         }
 
-        if (keysPressed.Contains(inputManager.PlayerKeybinds.PauseKey.ToString()) )
-            hasClickedWindow = false;
+        if (keysPressed.Contains(inputManager.PlayerKeybinds.PauseKey.ToString()))
+        {
+            //hasClickedWindow = false;
+            if (gameManager.IsGamePaused == false)
+                gameManager.IsGamePaused = true;
+            else
+                gameManager.IsGamePaused = false;
+        }
     }
 
     private void Shoot()

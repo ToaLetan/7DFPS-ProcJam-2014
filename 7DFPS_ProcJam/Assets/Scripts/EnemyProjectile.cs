@@ -3,7 +3,7 @@ using System.Collections;
 
 public class EnemyProjectile : MonoBehaviour 
 {
-
+    private const int DAMAGE = 1;
 
 	// Use this for initialization
 	void Start () 
@@ -22,7 +22,10 @@ public class EnemyProjectile : MonoBehaviour
         switch(collider.gameObject.tag)
         {
             case "Player":
-                Debug.Log("HULL DAMAGE");
+                if (GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().PlayerHull > 0)
+                {
+                    GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().ApplyPlayerDamage(DAMAGE);
+                }
                 break;
         }
     }

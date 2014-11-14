@@ -3,6 +3,8 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour 
 {
+    public float Max_Map_Bounds = 80.0f; //Bounds on the map on all sides
+
     private SpaceGenerator spaceGen = null;
     private SpawnManager spawnManager = null;
 
@@ -10,6 +12,12 @@ public class GameManager : MonoBehaviour
     private int playerHull = 100;
     private int numEnemiesInScene = 0;
     private int prevNumEnemies = 0;
+
+    private bool isGamePaused = false;
+
+    public delegate void PlayerEvent();
+
+    public PlayerEvent PlayerTakeDamage;
 
     public int PlayerNumKills
     {
@@ -27,6 +35,12 @@ public class GameManager : MonoBehaviour
     {
         get { return numEnemiesInScene; }
         set { numEnemiesInScene = value; }
+    }
+
+    public bool IsGamePaused
+    {
+        get { return isGamePaused; }
+        set { isGamePaused = value; }
     }
 
 	// Use this for initialization
@@ -59,5 +73,16 @@ public class GameManager : MonoBehaviour
 
         if(prevNumEnemies != numEnemiesInScene)
             prevNumEnemies = numEnemiesInScene;
+    }
+
+    public void ApplyPlayerDamage(int damageValue)
+    {
+        if (playerHull > 0)
+        {
+            playerHull -= damageValue;
+
+            if (PlayerTakeDamage != null)
+                PlayerTakeDamage();
+        }
     }
 }

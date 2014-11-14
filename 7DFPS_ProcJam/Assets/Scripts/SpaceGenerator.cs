@@ -8,6 +8,7 @@ public class SpaceGenerator //The class that spawns all space decorations (stars
     private const float SPACE_MAX_Y = 75.0f;
     private const float SPACE_MAX_Z = 75.0f;
 
+    private const float WARPGATE_SPAWN_CHANCE = 0.01f; //1% chance to spawn a warp gate
     private const float PLANET_SPAWN_CHANCE = 0.1f; //10% chance to spawn a planet
     private const float SHATTERED_PLANET_SPAWN_CHANCE = 0.4f; //If a planet spawns, it has a 40% chance of being the shattered design
     private const float PLANET_MIN_COLOR_SUM = 0.4f;
@@ -60,6 +61,9 @@ public class SpaceGenerator //The class that spawns all space decorations (stars
         //Planets
         possibleObjectsList.Add(Resources.Load<GameObject>("Prefabs/SpaceScenery/Planet_Whole"));
         possibleObjectsList.Add(Resources.Load<GameObject>("Prefabs/SpaceScenery/Planet_Shattered"));
+
+        //Warp Gate
+        possibleObjectsList.Add(Resources.Load<GameObject>("Prefabs/Warpgate"));
     }
 
     public void GenerateSpace()
@@ -74,8 +78,6 @@ public class SpaceGenerator //The class that spawns all space decorations (stars
 
             newSpaceObject.transform.parent = spaceContainer.transform;
         }
-
-            Debug.Log("Your space, sir.");
     }
 
     private int GenerateSpaceObjType()
@@ -83,7 +85,11 @@ public class SpaceGenerator //The class that spawns all space decorations (stars
         //TODO: Make this some fancy percentage type deal.
         int returnIndex = 0;
 
-        if (Random.value <= PLANET_SPAWN_CHANCE) //Spawn a planet
+        if (Random.value <= WARPGATE_SPAWN_CHANCE)
+        {
+            returnIndex = 5;
+        }
+        else if (Random.value <= PLANET_SPAWN_CHANCE) //Spawn a planet
         {
             if (Random.value <= SHATTERED_PLANET_SPAWN_CHANCE)
                 returnIndex = 4;

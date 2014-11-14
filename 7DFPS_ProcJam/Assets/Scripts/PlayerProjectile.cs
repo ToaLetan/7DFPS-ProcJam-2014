@@ -22,6 +22,9 @@ public class PlayerProjectile : MonoBehaviour
         {
             case "Enemy":
                 GameObject.Destroy(collider.gameObject);
+
+                GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>().PlayerNumKills++;
+
                 GameObject.Destroy(gameObject);
                 break;
         }

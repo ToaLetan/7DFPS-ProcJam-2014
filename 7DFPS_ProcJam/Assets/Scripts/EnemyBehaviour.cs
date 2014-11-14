@@ -10,6 +10,8 @@ public class EnemyBehaviour : MonoBehaviour
 
     private GameObject target = null;
 
+    private GameManager gameManager = null;
+
     private Timer projectileTimer = null;
 
     private bool isTargetInRange = false;
@@ -19,6 +21,9 @@ public class EnemyBehaviour : MonoBehaviour
 	void Start () 
     {
         target = GameObject.FindGameObjectWithTag("Player");
+
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+
         projectileTimer = new Timer(SHOT_COOLDOWN, true);
 
         projectileTimer.OnTimerComplete += OnShotCooldownEnd;
@@ -31,16 +36,19 @@ public class EnemyBehaviour : MonoBehaviour
         //If target isn't in range, move towards it
         //If target is in range, shoot
 
-        CheckTargetRange();
+        if (gameManager.IsGamePaused == false)
+        {
+            CheckTargetRange();
 
-        if (canShoot == false)
-            projectileTimer.Update();
+            if (canShoot == false)
+                projectileTimer.Update();
 
-        if (isTargetInRange == true && canShoot == true)
-            Shoot();
+            if (isTargetInRange == true && canShoot == true)
+                Shoot();
 
-        if (isTargetInRange == false || GetDistanceFromTarget() > MIN_RANGE_FROM_TARGET)
-            MoveToTarget();
+            if (isTargetInRange == false || GetDistanceFromTarget() > MIN_RANGE_FROM_TARGET)
+                MoveToTarget();
+        }
 	}
 
     private void CheckTargetRange()
