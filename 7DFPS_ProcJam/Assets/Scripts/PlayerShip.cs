@@ -260,6 +260,11 @@ public class PlayerShip : MonoBehaviour
                 gameManager.RestartGame();
             }   
         }
+
+        if (keysPressed.Contains(inputManager.PlayerKeybinds.ExitKey.ToString()))
+        {
+            Application.Quit();
+        }
     }
 
     private void Shoot()

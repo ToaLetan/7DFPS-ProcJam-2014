@@ -10,7 +10,7 @@ Platform assembly: E:\Game Jams\7DFPS-ProcJam-2014\7DFPS_ProcJam\AdriftAmongTheS
 Loading E:\Game Jams\7DFPS-ProcJam-2014\7DFPS_ProcJam\AdriftAmongTheStars_Data\Managed\UnityEngine.dll into Unity Child Domain
 Platform assembly: E:\Game Jams\7DFPS-ProcJam-2014\7DFPS_ProcJam\AdriftAmongTheStars_Data\Managed\Assembly-CSharp.dll (this message is harmless)
 Loading E:\Game Jams\7DFPS-ProcJam-2014\7DFPS_ProcJam\AdriftAmongTheStars_Data\Managed\Assembly-CSharp.dll into Unity Child Domain
-- Completed reload, in  0.064 seconds
+- Completed reload, in  0.061 seconds
 desktop: 1920x1080 60Hz; virtual: 1920x1080 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.

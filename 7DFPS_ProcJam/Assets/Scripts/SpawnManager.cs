@@ -108,30 +108,33 @@ public class SpawnManager
 
     private void SpawnNewEnemy()
     {
-        bool resetTimerAfterSpawn = false;
-
-        numEnemiesToSpawn--;
-
-        GameObject newEnemy = GameObject.Instantiate(Resources.Load("Prefabs/Enemy_Standard")) as GameObject;
-
-        //Randomly select a warp gate to spawn from.
-        GameObject spawnGate = spawnPoints[Random.Range(0, spawnPoints.Count)];
-
-        newEnemy.transform.position = spawnGate.transform.position;
-
-        //Spawn an animation to go along with the enemy.
-        GameObject enemySpawnAnim = GameObject.Instantiate(Resources.Load("Prefabs/Enemy_Spawn_Anim")) as GameObject;
-        enemySpawnAnim.transform.position = newEnemy.transform.position;
-
-        if (numEnemiesToSpawn > 0)
-            resetTimerAfterSpawn = true;
-        else
+        if (spawnPoints.Count > 0)
         {
-            resetTimerAfterSpawn = false;
-            isSpawningWave = false;
-        }
+            bool resetTimerAfterSpawn = false;
 
-        spawnTimer.ResetTimer(resetTimerAfterSpawn);
+            numEnemiesToSpawn--;
+
+            GameObject newEnemy = GameObject.Instantiate(Resources.Load("Prefabs/Enemy_Standard")) as GameObject;
+
+            //Randomly select a warp gate to spawn from.
+            GameObject spawnGate = spawnPoints[Random.Range(0, spawnPoints.Count)];
+
+            newEnemy.transform.position = spawnGate.transform.position;
+
+            //Spawn an animation to go along with the enemy.
+            GameObject enemySpawnAnim = GameObject.Instantiate(Resources.Load("Prefabs/Enemy_Spawn_Anim")) as GameObject;
+            enemySpawnAnim.transform.position = newEnemy.transform.position;
+
+            if (numEnemiesToSpawn > 0)
+                resetTimerAfterSpawn = true;
+            else
+            {
+                resetTimerAfterSpawn = false;
+                isSpawningWave = false;
+            }
+
+            spawnTimer.ResetTimer(resetTimerAfterSpawn);
+        }
     }
 
 }

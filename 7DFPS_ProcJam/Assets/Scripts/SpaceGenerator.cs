@@ -84,7 +84,7 @@ public class SpaceGenerator //The class that spawns all space decorations (stars
     {
         //TODO: Make this some fancy percentage type deal.
         int returnIndex = 0;
-
+        
         if (Random.value <= WARPGATE_SPAWN_CHANCE)
         {
             returnIndex = 5;

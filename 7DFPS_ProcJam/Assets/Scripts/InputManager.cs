@@ -11,6 +11,7 @@ public struct Keybinds
     public KeyCode RightKey;
     public KeyCode PauseKey;
     public KeyCode RestartKey;
+    public KeyCode ExitKey;
 
     public int LeftMouse;
     public int RightMouse;
@@ -67,6 +68,7 @@ public class InputManager
         playerKeybinds.RightKey = KeyCode.D;
         playerKeybinds.PauseKey = KeyCode.P;
         playerKeybinds.RestartKey = KeyCode.R;
+        playerKeybinds.ExitKey = KeyCode.Escape;
 
         playerKeybinds.LeftMouse = 0;
         playerKeybinds.RightMouse = 1;
@@ -145,6 +147,8 @@ public class InputManager
             pressedKeys.Add(playerKeybinds.PauseKey.ToString());
         if (Input.GetKeyDown(playerKeybinds.RestartKey))
             pressedKeys.Add(playerKeybinds.RestartKey.ToString());
+        if (Input.GetKeyDown(playerKeybinds.ExitKey))
+            pressedKeys.Add(playerKeybinds.ExitKey.ToString());
 
         if (Input.GetMouseButtonDown(playerKeybinds.LeftMouse))
             pressedKeys.Add(playerKeybinds.LeftMouse.ToString());
